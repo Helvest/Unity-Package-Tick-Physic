@@ -106,7 +106,7 @@ namespace TickPhysics
 
 		#region Tick
 
-		public virtual void Tick(float time, float deltaTime, float fixedDeltaTime)
+		public void Tick(float time, float deltaTime, float fixedDeltaTime)
 		{
 			Tick((double)time, deltaTime, fixedDeltaTime);
 		}
