@@ -1,35 +1,35 @@
-using TickPhysics;
 using UnityEngine;
 
-public class TickManager3D : TickManager
+namespace TickPhysics
 {
-
-	#region AutoSimulation
-
-	public override bool AutoSimulation
+	public class TickManager3D : TickManager
 	{
-		get
+
+		#region AutoSimulation
+
+		public override bool AutoSimulation
 		{
-			return _autoSimulation;
+			get => _autoSimulation;
+
+			set
+			{
+				_autoSimulation = value;
+
+				Physics.autoSimulation = _autoSimulation;
+			}
 		}
 
-		set
+		#endregion
+
+		#region SimulatePhysic
+
+		protected override void SimulatePhysic(double fixedDeltaTime)
 		{
-			_autoSimulation = value;
-
-			Physics.autoSimulation = _autoSimulation;
+			Physics.Simulate((float)fixedDeltaTime);
 		}
+
+		#endregion
+
 	}
-
-	#endregion
-
-	#region SimulatePhysic
-
-	protected override void SimulatePhysic(double fixedDeltaTime)
-	{
-		Physics.Simulate((float)fixedDeltaTime);
-	}
-
-	#endregion
 
 }

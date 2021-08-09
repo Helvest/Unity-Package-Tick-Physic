@@ -11,34 +11,30 @@ namespace TickPhysics
 		#region Variables
 
 		[SerializeField]
-		protected bool _autoSimulation = false;
-
-		public abstract bool AutoSimulation { get; set; }
-
-		[SerializeField]
-		protected bool isPhysicUpdated = true;
+		private bool _isPhysicUpdated = true;
 
 		public virtual bool IsPhysicUpdated
 		{
-			get
-			{
-				return isPhysicUpdated;
-			}
+			get => _isPhysicUpdated;
+			set => _isPhysicUpdated = value;
+		}
 
-			set
-			{
-				if (isPhysicUpdated == value)
-				{
-					return;
-				}
+		[SerializeField]
+		private bool _autoUpdate = false;
 
-				isPhysicUpdated = value;
+		public virtual bool AutoUpdate
+		{
+			get => _autoUpdate;
+			set => _autoUpdate = value;
+		}
 
-				if (isPhysicUpdated)
-				{
-					FixedTime = Time.time;
-				}
-			}
+		[SerializeField]
+		protected bool _autoSimulation = false;
+
+		public virtual bool AutoSimulation
+		{
+			get => _autoSimulation;
+			set => _autoSimulation = value;
 		}
 
 		public double TimeAtSimulation { get; protected set; } = 0;
@@ -66,8 +62,6 @@ namespace TickPhysics
 
 		protected virtual void OnEnable()
 		{
-			FixedTime = Time.time;
-
 			AutoSimulation = _autoSimulation;
 		}
 
@@ -100,13 +94,11 @@ namespace TickPhysics
 
 		#region Update
 
-		public virtual bool AutoUpdate { get; set; } = false;
-
 		protected virtual void Update()
 		{
 			if (AutoUpdate)
 			{
-				Tick(Time.deltaTime, Time.fixedDeltaTime);
+				Tick(Time.time, Time.deltaTime, Time.fixedDeltaTime);
 			}
 		}
 
@@ -114,13 +106,18 @@ namespace TickPhysics
 
 		#region Tick
 
-		public virtual void Tick(float deltaTime, float fixedDeltaTime)
+		public virtual void Tick(float time, float deltaTime, float fixedDeltaTime)
+		{
+			Tick((double)time, deltaTime, fixedDeltaTime);
+		}
+
+		public virtual void Tick(double time, double deltaTime, double fixedDeltaTime)
 		{
 			ReadInput();
 
-			if (isPhysicUpdated)
+			if (IsPhysicUpdated)
 			{
-				TimeAtSimulation = Time.time;
+				TimeAtSimulation = time;
 
 				NormalTime += deltaTime;
 
@@ -134,7 +131,7 @@ namespace TickPhysics
 		protected virtual void PhysicTick(double deltaTime, double fixedDeltaTime)
 		{
 			// Catch up with the game time.
-			// Advance the physics simulation in portions of Time.fixedDeltaTime
+			// Advance the physics simulation by portions of fixedDeltaTime
 			while (NormalTime >= FixedTime + fixedDeltaTime)
 			{
 				FixedFrameCount++;

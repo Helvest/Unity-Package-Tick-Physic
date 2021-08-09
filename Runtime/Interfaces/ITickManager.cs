@@ -13,6 +13,8 @@ namespace TickPhysics
 
 		public bool AutoSimulation { get; set; }
 
+		public float ExtraDeltaTime { get; }
+
 		#endregion
 
 		#region Event
@@ -35,11 +37,9 @@ namespace TickPhysics
 
 		#endregion
 
-
 		#region Update
 
-		public void Tick(float deltaTime, float fixedDeltaTime);
-
+		public void Tick(double time, double deltaTime, double fixedDeltaTime);
 
 		#endregion
 
