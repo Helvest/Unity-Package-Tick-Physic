@@ -1,0 +1,16 @@
+{
+  "name": "com.helvest.tickphysic",
+  "version": "1.0.0",
+  "displayName": "Tick Physic",
+  "description": "Unity physic moving by tick, with better controle on how unity update physic",
+  "keywords": [
+    "Physic",
+    "Tick",
+    "deltatime"
+  ],
+  "author": {
+    "name": "Pedro Dominic\u00e9 (Helvest)",
+    "url": "https://twitter.com/HelvestEpic"
+  },
+  "type": "tool"
+}
