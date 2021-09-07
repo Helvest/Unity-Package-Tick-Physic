@@ -9,7 +9,10 @@ namespace TickPhysics
 
 		public override bool AutoSimulation
 		{
-			get => _autoSimulation;
+			get
+			{
+				return _autoSimulation;
+			}
 
 			set
 			{

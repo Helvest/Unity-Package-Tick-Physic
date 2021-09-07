@@ -15,8 +15,15 @@ namespace TickPhysics
 
 		public virtual bool IsPhysicUpdated
 		{
-			get => _isPhysicUpdated;
-			set => _isPhysicUpdated = value;
+			get
+			{
+				return _isPhysicUpdated;
+			}
+
+			set
+			{
+				_isPhysicUpdated = value;
+			}
 		}
 
 		[SerializeField]
@@ -24,8 +31,15 @@ namespace TickPhysics
 
 		public virtual bool AutoUpdate
 		{
-			get => _autoUpdate;
-			set => _autoUpdate = value;
+			get
+			{
+				return _autoUpdate;
+			}
+
+			set
+			{
+				_autoUpdate = value;
+			}
 		}
 
 		[SerializeField]
@@ -33,8 +47,15 @@ namespace TickPhysics
 
 		public virtual bool AutoSimulation
 		{
-			get => _autoSimulation;
-			set => _autoSimulation = value;
+			get
+			{
+				return _autoSimulation;
+			}
+
+			set
+			{
+				_autoSimulation = value;
+			}
 		}
 
 		public double TimeAtSimulation { get; protected set; } = 0;

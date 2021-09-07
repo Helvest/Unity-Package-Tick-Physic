@@ -2,9 +2,9 @@ namespace TickPhysics
 {
 	public interface IPhysicsObject
 	{
-		public void UpdatePhysics();
+		void UpdatePhysics();
 
-		public void UpdateGraphics();
+		void UpdateGraphics();
 
 	}
 
