@@ -7,39 +7,39 @@ namespace TickPhysics
 
 		#region Variables
 
-		public bool IsPhysicUpdated { get; set; }
+		bool IsPhysicUpdated { get; set; }
 
-		public bool AutoUpdate { get; set; }
+		bool AutoUpdate { get; set; }
 
-		public bool AutoSimulation { get; set; }
+		bool AutoSimulation { get; set; }
 
-		public float ExtraDeltaTime { get; }
+		float ExtraDeltaTime { get; }
 
 		#endregion
 
 		#region Event
 
-		public event Action EventReadInput;
+		event Action EventReadInput;
 
-		public event Action EventUpdatePhysic;
+		event Action EventUpdatePhysic;
 
-		public event Action EventProcessInput;
+		event Action EventProcessInput;
 
-		public event Action EventUpdateGraphic;
+		event Action EventUpdateGraphic;
 
 		#endregion
 
 		#region IPhysicObject
 
-		public void Add(params IPhysicsObject[] physicObject);
+		void Add(params IPhysicsObject[] physicObject);
 
-		public void Remove(params IPhysicsObject[] physicObject);
+		void Remove(params IPhysicsObject[] physicObject);
 
 		#endregion
 
 		#region Update
 
-		public void Tick(double time, double deltaTime, double fixedDeltaTime);
+		void Tick(double time, double deltaTime, double fixedDeltaTime);
 
 		#endregion
 
