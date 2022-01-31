@@ -9,16 +9,13 @@ namespace TickPhysics
 
 		public override bool AutoSimulation
 		{
-			get
-			{
-				return _autoSimulation;
-			}
+			get => _autoSimulation;
 
 			set
 			{
 				_autoSimulation = value;
 
-				Physics2D.simulationMode =_autoSimulation ? SimulationMode2D.FixedUpdate : SimulationMode2D.Script;
+				Physics2D.simulationMode = _autoSimulation ? SimulationMode2D.FixedUpdate : SimulationMode2D.Script;
 			}
 		}
 
