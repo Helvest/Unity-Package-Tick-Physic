@@ -9,6 +9,14 @@ namespace TickPhysics
 
 		bool IsPhysicUpdated { get; set; }
 
+		double TimeAtSimulation { get; }
+
+		double NormalTime { get; }
+
+		double FixedTime { get; }
+
+		uint FixedFrameCount { get; }
+
 		float ExtraDeltaTime { get; }
 
 		#endregion
@@ -34,6 +42,8 @@ namespace TickPhysics
 		#endregion
 
 		#region Tick
+
+		void Tick(float time, float deltaTime, float fixedDeltaTime);
 
 		void Tick(double time, double deltaTime, double fixedDeltaTime);
 

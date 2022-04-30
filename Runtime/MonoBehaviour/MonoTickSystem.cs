@@ -24,6 +24,14 @@ namespace TickPhysics
 
 		public float ExtraDeltaTime => TickSystem.ExtraDeltaTime;
 
+		public double TimeAtSimulation => TickSystem.TimeAtSimulation;
+
+		public double NormalTime => TickSystem.NormalTime;
+
+		public double FixedTime => TickSystem.FixedTime;
+
+		public uint FixedFrameCount => TickSystem.FixedFrameCount;
+
 		#endregion
 
 		#region Event
@@ -105,24 +113,17 @@ namespace TickPhysics
 
 		#region Tick
 
-		public void Tick(double time, double deltaTime, double fixedDeltaTime)
-		{
-			TickSystem.Tick(time, deltaTime, fixedDeltaTime);
-		}
+		public void Tick(float time, float deltaTime, float fixedDeltaTime) => TickSystem.Tick(time, deltaTime, fixedDeltaTime);
+
+		public void Tick(double time, double deltaTime, double fixedDeltaTime) => TickSystem.Tick(time, deltaTime, fixedDeltaTime);
 
 		#endregion
 
 		#region IPhysicObject
 
-		public void Add(params IPhysicsObject[] physicObject)
-		{
-			TickSystem.Add(physicObject);
-		}
+		public void Add(params IPhysicsObject[] physicObject) => TickSystem.Add(physicObject);
 
-		public void Remove(params IPhysicsObject[] physicObject)
-		{
-			TickSystem.Remove(physicObject);
-		}
+		public void Remove(params IPhysicsObject[] physicObject) => TickSystem.Remove(physicObject);
 
 		#endregion
 
