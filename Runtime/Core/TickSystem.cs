@@ -1,54 +1,24 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace TickPhysics
 {
-
-	public abstract class TickManager : MonoBehaviour, ITickManager
+	public abstract class TickSystem : ITickSystem
 	{
 
-		#region Variables
+		#region Fields
 
-		[SerializeField]
-		private bool _isPhysicUpdated = true;
+		public virtual bool IsPhysicUpdated { get; set; } = true;
 
-		public virtual bool IsPhysicUpdated
-		{
-			get => _isPhysicUpdated;
+		public virtual double TimeAtSimulation { get; protected set; } = 0;
 
-			set => _isPhysicUpdated = value;
-		}
+		public virtual double NormalTime { get; protected set; } = 0;
 
-		[SerializeField]
-		private bool _autoUpdate = false;
+		public virtual double FixedTime { get; protected set; } = 0;
 
-		public virtual bool AutoUpdate
-		{
-			get => _autoUpdate;
+		public virtual uint FixedFrameCount { get; protected set; } = 0;
 
-			set => _autoUpdate = value;
-		}
-
-		[SerializeField]
-		protected bool _autoSimulation = false;
-
-		public virtual bool AutoSimulation
-		{
-			get => _autoSimulation;
-
-			set => _autoSimulation = value;
-		}
-
-		public double TimeAtSimulation { get; protected set; } = 0;
-
-		public double NormalTime { get; protected set; } = 0;
-
-		public double FixedTime { get; protected set; } = 0;
-
-		public uint FixedFrameCount { get; protected set; } = 0;
-
-		public float ExtraDeltaTime { get; protected set; } = 0;
+		public virtual float ExtraDeltaTime { get; protected set; } = 0;
 
 		#endregion
 
@@ -61,47 +31,26 @@ namespace TickPhysics
 
 		#endregion
 
-		#region OnEnable
-
-		protected virtual void OnEnable()
-		{
-			AutoSimulation = _autoSimulation;
-		}
-
-		#endregion
-
 		#region IPhysicObject
 
-		protected List<IPhysicsObject> _physicObjects = new List<IPhysicsObject>(256);
+		protected readonly List<IPhysicsObject> physicObjects = new List<IPhysicsObject>(256);
 
-		public virtual void Add(params IPhysicsObject[] physicObjects)
+		public virtual void Add(params IPhysicsObject[] physicObjectsToAdd)
 		{
-			foreach (var item in physicObjects)
+			foreach (var item in physicObjectsToAdd)
 			{
-				if (!_physicObjects.Contains(item))
+				if (!physicObjects.Contains(item))
 				{
-					_physicObjects.Add(item);
+					physicObjects.Add(item);
 				}
 			}
 		}
 
-		public virtual void Remove(params IPhysicsObject[] physicObjects)
+		public virtual void Remove(params IPhysicsObject[] physicObjectsToRemove)
 		{
-			foreach (var item in physicObjects)
+			foreach (var item in physicObjectsToRemove)
 			{
-				_physicObjects.Remove(item);
-			}
-		}
-
-		#endregion
-
-		#region Update
-
-		protected virtual void Update()
-		{
-			if (AutoUpdate)
-			{
-				Tick(Time.time, Time.deltaTime, Time.fixedDeltaTime);
+				physicObjects.Remove(item);
 			}
 		}
 
@@ -165,7 +114,7 @@ namespace TickPhysics
 
 		protected virtual void UpdatePhysic()
 		{
-			foreach (var physicObject in _physicObjects)
+			foreach (var physicObject in physicObjects)
 			{
 				physicObject.UpdatePhysics();
 			}
@@ -182,7 +131,7 @@ namespace TickPhysics
 
 		protected virtual void UpdateGraphic()
 		{
-			foreach (var physicObject in _physicObjects)
+			foreach (var physicObject in physicObjects)
 			{
 				physicObject.UpdateGraphics();
 			}
@@ -193,5 +142,4 @@ namespace TickPhysics
 		#endregion
 
 	}
-
 }

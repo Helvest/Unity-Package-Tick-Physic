@@ -2,16 +2,12 @@ using System;
 
 namespace TickPhysics
 {
-	public interface ITickManager
+	public interface ITickSystem
 	{
 
-		#region Variables
+		#region Fields
 
 		bool IsPhysicUpdated { get; set; }
-
-		bool AutoUpdate { get; set; }
-
-		bool AutoSimulation { get; set; }
 
 		float ExtraDeltaTime { get; }
 
@@ -31,13 +27,13 @@ namespace TickPhysics
 
 		#region IPhysicObject
 
-		void Add(params IPhysicsObject[] physicObject);
+		void Add(params IPhysicsObject[] physicObjectsToAdd);
 
-		void Remove(params IPhysicsObject[] physicObject);
+		void Remove(params IPhysicsObject[] physicObjectsToRemove);
 
 		#endregion
 
-		#region Update
+		#region Tick
 
 		void Tick(double time, double deltaTime, double fixedDeltaTime);
 

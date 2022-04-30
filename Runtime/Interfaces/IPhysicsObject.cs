@@ -5,7 +5,5 @@ namespace TickPhysics
 		void UpdatePhysics();
 
 		void UpdateGraphics();
-
 	}
-
 }
