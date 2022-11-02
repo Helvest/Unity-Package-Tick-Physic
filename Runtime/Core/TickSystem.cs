@@ -20,6 +20,10 @@ namespace TickPhysics
 
 		public virtual float ExtraDeltaTime { get; protected set; } = 0;
 
+		protected virtual bool IsInUpdateLoop { get; set; } = false;
+
+		protected virtual int LoopIndex { get; set; } = 0;
+
 		#endregion
 
 		#region Events
@@ -50,7 +54,13 @@ namespace TickPhysics
 		{
 			foreach (var item in physicObjectsToRemove)
 			{
-				physicObjects.Remove(item);
+				int index = physicObjects.IndexOf(item);
+				physicObjects.RemoveAt(index);
+
+				if (IsInUpdateLoop && index < LoopIndex)
+				{
+					LoopIndex--;
+				}
 			}
 		}
 
@@ -77,6 +87,8 @@ namespace TickPhysics
 
 				// Here you can access the transforms state right after the simulation, if needed...	
 				UpdateGraphic();
+
+				IsInUpdateLoop = false;
 			}
 		}
 
@@ -114,10 +126,14 @@ namespace TickPhysics
 
 		protected virtual void UpdatePhysic()
 		{
-			foreach (var physicObject in physicObjects)
+			IsInUpdateLoop = true;
+
+			for (LoopIndex = 0; LoopIndex < physicObjects.Count; LoopIndex++)
 			{
-				physicObject.UpdatePhysics();
+				physicObjects[LoopIndex].UpdatePhysics();
 			}
+
+			IsInUpdateLoop = false;
 
 			EventUpdatePhysic?.Invoke();
 		}
@@ -131,10 +147,14 @@ namespace TickPhysics
 
 		protected virtual void UpdateGraphic()
 		{
-			foreach (var physicObject in physicObjects)
+			IsInUpdateLoop = true;
+
+			for (LoopIndex = 0; LoopIndex < physicObjects.Count; LoopIndex++)
 			{
-				physicObject.UpdateGraphics();
+				physicObjects[LoopIndex].UpdateGraphics();
 			}
+
+			IsInUpdateLoop = false;
 
 			EventUpdateGraphic?.Invoke();
 		}

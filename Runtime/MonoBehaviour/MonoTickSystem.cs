@@ -113,9 +113,11 @@ namespace TickPhysics
 
 		#region Tick
 
-		public void Tick(float time, float deltaTime, float fixedDeltaTime) => TickSystem.Tick(time, deltaTime, fixedDeltaTime);
+		public void Tick(float time, float deltaTime, float fixedDeltaTime)
+			=> TickSystem.Tick(time, deltaTime, fixedDeltaTime);
 
-		public void Tick(double time, double deltaTime, double fixedDeltaTime) => TickSystem.Tick(time, deltaTime, fixedDeltaTime);
+		public void Tick(double time, double deltaTime, double fixedDeltaTime)
+			=> TickSystem.Tick(time, deltaTime, fixedDeltaTime);
 
 		#endregion
 
