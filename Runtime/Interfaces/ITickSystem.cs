@@ -43,8 +43,6 @@ namespace TickPhysics
 
 		#region Tick
 
-		void Tick(float time, float deltaTime, float fixedDeltaTime);
-
 		void Tick(double time, double deltaTime, double fixedDeltaTime);
 
 		#endregion

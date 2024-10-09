@@ -1,17 +1,36 @@
-using UnityEngine;
 using TickPhysics;
+using UnityEngine;
 
 public class TickSystem3D : TickSystem
 {
 
-	#region AutoSimulation
+	#region SimulationMode
 
 	public virtual bool AutoSimulation
 	{
+#if UNITY_2022_2_OR_NEWER
+		get => Physics.simulationMode != SimulationMode.Script;
+		set
+		{
+			if (AutoSimulation != value)
+			{
+				Physics.simulationMode = value ? SimulationMode.FixedUpdate : SimulationMode.Script;
+			}
+		}
+#else
 		get => Physics.autoSimulation;
-
 		set => Physics.autoSimulation = value;
+#endif
 	}
+
+#if UNITY_2022_2_OR_NEWER
+	public virtual SimulationMode SimulationMode
+	{
+		get => Physics.simulationMode;
+
+		set => Physics.simulationMode = value;
+	}
+#endif
 
 	#endregion
 
@@ -40,17 +59,40 @@ public class MonoTickSystem3D : MonoTickSystem
 
 	#endregion
 
-	#region AutoSimulation
+	#region SimulationMode
 
 	[SerializeField]
 	protected bool autoSimulation = false;
+
+#if UNITY_2022_2_OR_NEWER
+	[SerializeField]
+	protected SimulationMode simulationMode = SimulationMode.Script;
+#endif
 
 	public virtual bool AutoSimulation
 	{
 		get => TickSystem3D.AutoSimulation;
 
-		set => TickSystem3D.AutoSimulation = autoSimulation = value;
+		set
+		{
+			TickSystem3D.AutoSimulation = autoSimulation = value;
+#if UNITY_2022_2_OR_NEWER
+			simulationMode = TickSystem3D.SimulationMode;
+#endif
+		}
 	}
+#if UNITY_2022_2_OR_NEWER
+	public virtual SimulationMode SimulationMode
+	{
+		get => TickSystem3D.SimulationMode;
+
+		set
+		{
+			TickSystem3D.SimulationMode = simulationMode = value;
+			autoSimulation = TickSystem3D.AutoSimulation;
+		}
+	}
+#endif
 
 	#endregion
 
@@ -58,9 +100,36 @@ public class MonoTickSystem3D : MonoTickSystem
 
 	protected override void OnEnable()
 	{
-		base.OnEnable();
+#if UNITY_2022_2_OR_NEWER
+		TickSystem3D.SimulationMode = simulationMode;
+#endif
 		AutoSimulation = autoSimulation;
+		base.OnEnable();
 	}
+
+	#endregion
+
+	#region LateUpdate
+
+#if UNITY_EDITOR
+
+	protected override void LateUpdate()
+	{
+		base.LateUpdate();
+
+		if (AutoSimulation != autoSimulation)
+		{
+			AutoSimulation = autoSimulation;
+		}
+#if UNITY_2022_2_OR_NEWER
+		else if (SimulationMode != simulationMode)
+		{
+			SimulationMode = simulationMode;
+		}
+#endif
+	}
+
+#endif
 
 	#endregion
 

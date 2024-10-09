@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace TickPhysics
 {
@@ -68,32 +69,36 @@ namespace TickPhysics
 
 		#region Tick
 
-		public void Tick(float time, float deltaTime, float fixedDeltaTime)
-		{
-			Tick((double)time, deltaTime, fixedDeltaTime);
-		}
-
 		public virtual void Tick(double time, double deltaTime, double fixedDeltaTime)
 		{
 			ReadInput();
 
-			if (IsPhysicUpdated)
+			if (!IsPhysicUpdated)
 			{
-				TimeAtSimulation = time;
-
-				NormalTime += deltaTime;
-
-				PhysicTick(deltaTime, fixedDeltaTime);
-
-				// Here you can access the transforms state right after the simulation, if needed...	
-				UpdateGraphic();
-
-				IsInUpdateLoop = false;
+				return;
 			}
+
+			TimeAtSimulation = time;
+
+			NormalTime += deltaTime;
+
+			PhysicTick(fixedDeltaTime);
+
+			CalculateExtraDeltaTime();
+
+			// Here you can access the transforms state right after the simulation, if needed...	
+			UpdateGraphic();
+
+			//IsInUpdateLoop = false;
 		}
 
-		protected virtual void PhysicTick(double deltaTime, double fixedDeltaTime)
+		protected virtual void PhysicTick(double fixedDeltaTime)
 		{
+			if (fixedDeltaTime <= 0)
+			{
+				return;
+			}
+
 			// Catch up with the game time.
 			// Advance the physics simulation by portions of fixedDeltaTime
 			while (NormalTime >= FixedTime + fixedDeltaTime)
@@ -111,8 +116,11 @@ namespace TickPhysics
 				//Prepare inputs for next physic frame
 				ProcessInput();
 			}
+		}
 
-			ExtraDeltaTime = (float)(NormalTime - FixedTime + deltaTime);
+		protected virtual void CalculateExtraDeltaTime()
+		{
+			ExtraDeltaTime = (float)(NormalTime - FixedTime);
 		}
 
 		#endregion

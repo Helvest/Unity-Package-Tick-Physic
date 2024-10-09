@@ -3,15 +3,13 @@ using UnityEngine;
 
 namespace TickPhysics
 {
-	public abstract class MonoTickSystem : MonoBehaviour, ITickSystem
+	public abstract class AbstractMonoTickSystem<T> : MonoBehaviour, ITickSystem where T : ITickSystem
 	{
 
 		#region Fields
 
-		protected abstract ITickSystem TickSystem { get; }
-
 		[field: SerializeField]
-		public virtual bool AutoUpdate { get; set; } = false;
+		public T TickSystem { get; private set; }
 
 		[SerializeField]
 		private bool _isPhysicUpdated = true;
@@ -99,25 +97,28 @@ namespace TickPhysics
 
 		#endregion
 
-		#region Update
+		#region LateUpdate
 
-		protected virtual void Update()
+#if UNITY_EDITOR
+
+		protected virtual void LateUpdate()
 		{
-			if (AutoUpdate)
+			if (IsPhysicUpdated != _isPhysicUpdated)
 			{
-				TickSystem.Tick(Time.time, Time.deltaTime, Time.fixedDeltaTime);
+				IsPhysicUpdated = _isPhysicUpdated;
 			}
 		}
+
+#endif
 
 		#endregion
 
 		#region Tick
 
-		public void Tick(float time, float deltaTime, float fixedDeltaTime)
-			=> TickSystem.Tick(time, deltaTime, fixedDeltaTime);
-
-		public void Tick(double time, double deltaTime, double fixedDeltaTime)
-			=> TickSystem.Tick(time, deltaTime, fixedDeltaTime);
+		public virtual void Tick(double time, double deltaTime, double fixedDeltaTime)
+		{
+			TickSystem.Tick(time, deltaTime, fixedDeltaTime);
+		}
 
 		#endregion
 
