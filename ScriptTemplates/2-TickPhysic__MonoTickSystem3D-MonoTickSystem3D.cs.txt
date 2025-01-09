@@ -48,16 +48,8 @@ public class TickSystem3D : TickSystem
 
 }
 
-public class MonoTickSystem3D : MonoTickSystem
+public class MonoTickSystem3D : AbstractMonoTickSystem<TickSystem3D>
 {
-
-	#region Fields
-
-	protected override ITickSystem TickSystem => TickSystem3D;
-
-	protected TickSystem3D TickSystem3D { get; } = new TickSystem3D();
-
-	#endregion
 
 	#region SimulationMode
 
@@ -71,11 +63,11 @@ public class MonoTickSystem3D : MonoTickSystem
 
 	public virtual bool AutoSimulation
 	{
-		get => TickSystem3D.AutoSimulation;
+		get => TickSystem.AutoSimulation;
 
 		set
 		{
-			TickSystem3D.AutoSimulation = autoSimulation = value;
+			TickSystem.AutoSimulation = autoSimulation = value;
 #if UNITY_2022_2_OR_NEWER
 			simulationMode = TickSystem3D.SimulationMode;
 #endif

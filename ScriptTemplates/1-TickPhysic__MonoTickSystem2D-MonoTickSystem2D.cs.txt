@@ -1,5 +1,5 @@
-using UnityEngine;
 using TickPhysics;
+using UnityEngine;
 
 public class TickSystem2D : TickSystem
 {
@@ -29,16 +29,8 @@ public class TickSystem2D : TickSystem
 
 }
 
-public class MonoTickSystem2D : MonoTickSystem
+public class MonoTickSystem2D : AbstractMonoTickSystem<TickSystem2D>
 {
-
-	#region Fields
-
-	protected override ITickSystem TickSystem => TickSystem2D;
-
-	protected TickSystem2D TickSystem2D { get; } = new TickSystem2D();
-
-	#endregion
 
 	#region SimulationMode
 
@@ -47,9 +39,9 @@ public class MonoTickSystem2D : MonoTickSystem
 
 	public virtual SimulationMode2D SimulationMode
 	{
-		get => TickSystem2D.SimulationMode;
+		get => TickSystem.SimulationMode;
 
-		set => TickSystem2D.SimulationMode = simulationMode = value;
+		set => TickSystem.SimulationMode = simulationMode = value;
 	}
 
 	#endregion

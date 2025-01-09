@@ -2,50 +2,48 @@ using System;
 
 namespace TickPhysics
 {
-	public interface ITickSystem
-	{
+    public interface ITickSystem
+    {
+        #region Fields
 
-		#region Fields
+        bool IsPhysicUpdated { get; set; }
 
-		bool IsPhysicUpdated { get; set; }
+        double TimeAtSimulation { get; }
 
-		double TimeAtSimulation { get; }
+        double NormalTime { get; }
 
-		double NormalTime { get; }
+        double FixedTime { get; }
 
-		double FixedTime { get; }
+        uint FixedFrameCount { get; }
 
-		uint FixedFrameCount { get; }
+        float ExtraDeltaTime { get; }
 
-		float ExtraDeltaTime { get; }
+        #endregion
 
-		#endregion
+        #region Event
 
-		#region Event
+        event Action EventReadInput;
 
-		event Action EventReadInput;
+        event Action EventUpdatePhysic;
 
-		event Action EventUpdatePhysic;
+        event Action<uint> EventProcessInput;
 
-		event Action EventProcessInput;
+        event Action EventUpdateGraphic;
 
-		event Action EventUpdateGraphic;
+        #endregion
 
-		#endregion
+        #region IPhysicObject
 
-		#region IPhysicObject
+        void Add(params IPhysicsObject[] physicObjectsToAdd);
 
-		void Add(params IPhysicsObject[] physicObjectsToAdd);
+        void Remove(params IPhysicsObject[] physicObjectsToRemove);
 
-		void Remove(params IPhysicsObject[] physicObjectsToRemove);
+        #endregion
 
-		#endregion
+        #region Tick
 
-		#region Tick
+        void Tick(double time, double deltaTime, double fixedDeltaTime);
 
-		void Tick(double time, double deltaTime, double fixedDeltaTime);
-
-		#endregion
-
-	}
+        #endregion
+    }
 }

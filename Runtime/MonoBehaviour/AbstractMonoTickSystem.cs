@@ -3,132 +3,104 @@ using UnityEngine;
 
 namespace TickPhysics
 {
-	public abstract class AbstractMonoTickSystem<T> : MonoBehaviour, ITickSystem where T : ITickSystem
-	{
+    public abstract class AbstractMonoTickSystem<T> : MonoBehaviour, ITickSystem where T : class, ITickSystem
+    {
+        #region Fields
 
-		#region Fields
+        [field: SerializeField] public T TickSystem { get; private set; }
 
-		[field: SerializeField]
-		public T TickSystem { get; private set; }
+        [SerializeField] private bool _isPhysicUpdated = true;
 
-		[SerializeField]
-		private bool _isPhysicUpdated = true;
+        public bool IsPhysicUpdated
+        {
+            get => TickSystem.IsPhysicUpdated;
+            set => TickSystem.IsPhysicUpdated = _isPhysicUpdated = value;
+        }
 
-		public bool IsPhysicUpdated
-		{
-			get => TickSystem.IsPhysicUpdated;
-			set => TickSystem.IsPhysicUpdated = _isPhysicUpdated = value;
-		}
+        public float ExtraDeltaTime => TickSystem.ExtraDeltaTime;
 
-		public float ExtraDeltaTime => TickSystem.ExtraDeltaTime;
+        public double TimeAtSimulation => TickSystem.TimeAtSimulation;
 
-		public double TimeAtSimulation => TickSystem.TimeAtSimulation;
+        public double NormalTime => TickSystem.NormalTime;
 
-		public double NormalTime => TickSystem.NormalTime;
+        public double FixedTime => TickSystem.FixedTime;
 
-		public double FixedTime => TickSystem.FixedTime;
+        public uint FixedFrameCount => TickSystem.FixedFrameCount;
 
-		public uint FixedFrameCount => TickSystem.FixedFrameCount;
+        #endregion
 
-		#endregion
+        #region Event
 
-		#region Event
+        public event Action EventReadInput
+        {
+            add => TickSystem.EventReadInput += value;
 
-		public event Action EventReadInput
-		{
-			add
-			{
-				TickSystem.EventReadInput += value;
-			}
+            remove => TickSystem.EventReadInput -= value;
+        }
 
-			remove
-			{
-				TickSystem.EventReadInput -= value;
-			}
-		}
+        public event Action EventUpdatePhysic
+        {
+            add => TickSystem.EventUpdatePhysic += value;
 
-		public event Action EventUpdatePhysic
-		{
-			add
-			{
-				TickSystem.EventUpdatePhysic += value;
-			}
+            remove => TickSystem.EventUpdatePhysic -= value;
+        }
 
-			remove
-			{
-				TickSystem.EventUpdatePhysic -= value;
-			}
-		}
+        public event Action<uint> EventProcessInput
+        {
+            add => TickSystem.EventProcessInput += value;
 
-		public event Action EventProcessInput
-		{
-			add
-			{
-				TickSystem.EventProcessInput += value;
-			}
+            remove => TickSystem.EventProcessInput -= value;
+        }
 
-			remove
-			{
-				TickSystem.EventProcessInput -= value;
-			}
-		}
+        public event Action EventUpdateGraphic
+        {
+            add => TickSystem.EventUpdateGraphic += value;
 
-		public event Action EventUpdateGraphic
-		{
-			add
-			{
-				TickSystem.EventUpdateGraphic += value;
-			}
+            remove => TickSystem.EventUpdateGraphic -= value;
+        }
 
-			remove
-			{
-				TickSystem.EventUpdateGraphic -= value;
-			}
-		}
+        #endregion
 
-		#endregion
+        #region OnEnable
 
-		#region OnEnable
+        protected virtual void OnEnable()
+        {
+            IsPhysicUpdated = _isPhysicUpdated;
+        }
 
-		protected virtual void OnEnable()
-		{
-			IsPhysicUpdated = _isPhysicUpdated;
-		}
+        #endregion
 
-		#endregion
-
-		#region LateUpdate
+        #region LateUpdate
 
 #if UNITY_EDITOR
 
-		protected virtual void LateUpdate()
-		{
-			if (IsPhysicUpdated != _isPhysicUpdated)
-			{
-				IsPhysicUpdated = _isPhysicUpdated;
-			}
-		}
+        protected virtual void LateUpdate()
+        {
+            if (IsPhysicUpdated != _isPhysicUpdated)
+            {
+                IsPhysicUpdated = _isPhysicUpdated;
+            }
+        }
 
 #endif
 
-		#endregion
+        #endregion
 
-		#region Tick
+        #region Tick
 
-		public virtual void Tick(double time, double deltaTime, double fixedDeltaTime)
-		{
-			TickSystem.Tick(time, deltaTime, fixedDeltaTime);
-		}
+        public virtual void Tick(double time, double deltaTime, double fixedDeltaTime)
+        {
+            TickSystem.Tick(time, deltaTime, fixedDeltaTime);
+        }
 
-		#endregion
+        #endregion
 
-		#region IPhysicObject
+        #region IPhysicObject
 
-		public void Add(params IPhysicsObject[] physicObject) => TickSystem.Add(physicObject);
+        public void Add(params IPhysicsObject[] physicObject) => TickSystem.Add(physicObject);
 
-		public void Remove(params IPhysicsObject[] physicObject) => TickSystem.Remove(physicObject);
+        public void Remove(params IPhysicsObject[] physicObject) => TickSystem.Remove(physicObject);
 
-		#endregion
-
-	}
+        #endregion
+    }
 }
